@@ -142,3 +142,9 @@ on hackers.hacker_id=subs.hacker_id
 group by hackers.hacker_id, hackers.name) data 
 where data.totalscore > 0
 order by data.totalscore desc, hacker_id;
+
+# Average Population
+
+# Query the average population for all cities in CITY, rounded down to the nearest integer.
+
+SELECT ROUND(AVG(POPULATION)) FROM CITY;

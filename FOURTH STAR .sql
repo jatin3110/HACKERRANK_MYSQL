@@ -106,4 +106,39 @@ FROM BST father
 ORDER BY N;
 
 
+# New Companies
 
+# Amber's conglomerate corporation just acquired some new companies. Each of the companies follows this hierarchy: 
+
+# Given the table schemas below, write a query to print the company_code, founder name, total number of lead managers, total number of senior managers, total number of managers, and total number of employees. Order your output by ascending company_code.
+
+select
+    C.company_code, 
+    group_concat( distinct C.founder),
+    count(distinct LM.lead_manager_code),
+    count(distinct SM.senior_manager_code),
+    count(distinct M.manager_code),
+    count(distinct E.employee_code)
+from Company C
+left join Lead_Manager LM on LM.company_code = C.company_code
+left join Senior_Manager SM on SM.lead_manager_code = LM.lead_manager_code
+left join Manager M on M.senior_manager_code = SM.senior_manager_code
+left join Employee E on E.manager_code = M.manager_code
+group by C.company_code
+order by C.company_code;
+
+
+# Contest Leaderboard
+
+# You did such a great job helping Julia with her last coding contest challenge that she wants you to work on this one, too!
+
+# The total score of a hacker is the sum of their maximum scores for all of the challenges. Write a query to print the hacker_id, name, and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, then sort the result by ascending hacker_id. Exclude all hackers with a total score of  from your result.
+
+select * from 
+(select hackers.hacker_id, name, sum(subs.maxscore) as totalscore from hackers INNER JOIN 
+(select hacker_id, challenge_id, max(score) as maxscore from submissions
+group by hacker_id, challenge_id) subs
+on hackers.hacker_id=subs.hacker_id
+group by hackers.hacker_id, hackers.name) data 
+where data.totalscore > 0
+order by data.totalscore desc, hacker_id;

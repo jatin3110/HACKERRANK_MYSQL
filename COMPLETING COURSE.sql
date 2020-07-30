@@ -22,4 +22,18 @@ SELECT
 FROM CITY
 WHERE DISTRICT='CALIFORNIA';
 
+# Asian Population
+# Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
 
+SELECT SUM(city.population)
+FROM city
+INNER JOIN country ON city.countrycode = country.code
+WHERE country.continent = 'Asia'
+
+#African Cities
+# Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'.
+
+SELECT city.name
+FROM city
+INNER JOIN country ON city.countrycode = country.code
+WHERE country.continent = 'Africa';

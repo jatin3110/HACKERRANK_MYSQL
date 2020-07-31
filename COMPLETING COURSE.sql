@@ -135,3 +135,17 @@ FROM Students s , Friends f , Packages p1,Packages p2
 WHERE s.ID = f.ID and s.ID = p1.ID and f.Friend_ID = p2.ID and
 p1.Salary < p2.Salary
 ORDER BY p2.Salary;
+
+    
+# Symmetric Pairs
+# You are given a table, Functions, containing two columns: X and Y.
+# Two pairs (X1, Y1) and (X2, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
+# Write a query to output all such symmetric pairs in ascending order by the value of X.
+    
+select x, y from functions f1 
+    where exists(select * from functions f2 where f2.y=f1.x 
+    and f2.x=f1.y and f2.x>f1.x) and (x!=y) 
+union 
+select x, y from functions f1 where x=y and 
+    ((select count(*) from functions where x=f1.x and y=f1.x)>1)    
+        order by x;

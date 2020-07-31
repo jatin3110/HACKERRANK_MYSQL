@@ -106,4 +106,32 @@ group by H2.hacker_id, H2.name
     group by other_counts
 having count(other_counts) =1)
 order by total_count desc, H.hacker_id;
+   
+# SQL Project Planning
+# you are given a table, Projects, containing three columns: Task_ID, Start_Date and End_Date. It is guaranteed that the difference between the End_Date and the Start_Date is equal to 1 day for each row in the table.
+
+# If the End_Date of the tasks are consecutive, then they are part of the same project. Samantha is interested in finding the total number of different projects completed.
+
+# Write a query to output the start and end dates of projects listed by the number of days it took to complete the project in ascending order. If there is more than one project that have the same number of completion days, then order by the start date of the project.
+
+set @row1:=0;
+set @row2:=0; 
     
+select p_start.start_date,p_end.end_date
+from (select @row1:=@row1+1 as rown,
+    start_date from projects
+    where start_date not in (select end_date from projects)) as p_start 
+    inner join (select @row2:=@row2+1 as rown, 
+    end_date from projects where end_date not in (select start_date from projects)) as p_end on p_start.rown=p_end.rown 
+    order by p_end.end_date-p_start.start_date,p_start.start_date;
+
+    
+# Placements
+# You are given three tables: Students, Friends and Packages. Students contains two columns: ID and Name. Friends contains two columns: ID and Friend_ID (ID of the ONLY best friend). Packages contains two columns: ID and Salary (offered salary in $ thousands per month).
+# Write a query to output the names of those students whose best friends got offered a higher salary than them. Names must be ordered by the salary amount offered to the best friends. It is guaranteed that no two students got same salary offer.
+
+SELECT s.Name
+FROM Students s , Friends f , Packages p1,Packages p2
+WHERE s.ID = f.ID and s.ID = p1.ID and f.Friend_ID = p2.ID and
+p1.Salary < p2.Salary
+ORDER BY p2.Salary;

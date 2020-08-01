@@ -183,3 +183,49 @@ OR SUM(TOTAL_VIEWS) != 0
 OR SUM(TOTAL_UNIQUE_VIEWS) != 0
 ORDER BY CONTEST_ID;
 
+# 15 Days of Learning SQL
+# Julia conducted a  days of learning SQL contest. The start date of the contest was March 01, 2016 and the end date was March 15, 2016.
+
+# Write a query to print total number of unique hackers who made at least  submission each day (starting on the first day of the contest), and find the hacker_id and name of the hacker who made maximum number of submissions each day. If more than one such hacker has a maximum number of submissions, print the lowest hacker_id. The query should print this information for each day of the contest, sorted by the date.
+
+with Sub1 as (
+    select s1.submission_date, s1.hacker_id,
+    count (distinct s1.submission_id) as date_submissions,
+    1 + datediff(day, 'March 1, 2016', s1.submission_date) as contest_day,
+    count (distinct s2.submission_date) as submission_days
+    from Submissions s1 join Submissions s2
+        on s1.hacker_id = s2.hacker_id and s1.submission_date >= s2.submission_date
+    group by s1.submission_date, s1.hacker_id
+),
+Sub2 as (
+    select submission_date, hacker_id, date_submissions
+    from Sub1 where submission_days = contest_day
+),
+Sub3a as (
+    select submission_date, count(hacker_id) as hackers
+    from Sub2 group by submission_date
+),
+Sub3b as (
+    select submission_date, max(date_submissions) as max_submissions
+    from Sub1 group by submission_date
+),
+Sub4 as (
+    select s1.submission_date, s3.hackers,
+        (select top 1 s2.hacker_id from Sub1 s2
+         where s1.submission_date = s2.submission_date and s1.max_submissions = s2.date_submissions
+         order by s2.hacker_id) as hacker_id
+    from Sub3b s1
+    join Sub3a s3 on s1.submission_date = s3.submission_date
+)
+select s.*, h.name from Sub4 s join Hackers h on s.hacker_id = h.hacker_id order by submission_date;
+
+# Draw The Triangle 1
+    
+SELECT 
+    REPEAT('* ', @NUMBER := @NUMBER - 1) 
+FROM information_schema.tables, (SELECT @NUMBER:=21) t LIMIT 20;
+    
+# Draw The Triangle 2
+    
+    SELECT REPEAT('* ', @NUMBER := @NUMBER + 1) FROM information_schema.tables, (SELECT @NUMBER:=0) t LIMIT 20
+

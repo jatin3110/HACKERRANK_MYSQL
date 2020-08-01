@@ -222,7 +222,7 @@ select s.*, h.name from Sub4 s join Hackers h on s.hacker_id = h.hacker_id order
 # Draw The Triangle 1
     
 SELECT 
-    REPEAT('* ', @NUMBER := @NUMBER - 1) 
+    REPEAT('* ', @NUMBER := @NUMBER - 1)
 FROM information_schema.tables, (SELECT @NUMBER:=21) t LIMIT 20;
     
 # Draw The Triangle 2

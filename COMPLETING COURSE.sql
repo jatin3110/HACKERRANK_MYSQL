@@ -229,3 +229,18 @@ FROM information_schema.tables, (SELECT @NUMBER:=21) t LIMIT 20;
     
     SELECT REPEAT('* ', @NUMBER := @NUMBER + 1) FROM information_schema.tables, (SELECT @NUMBER:=0) t LIMIT 20
 
+# Print Prime Numbers
+
+with numSel as (
+    select level num from dual connect by level <= 1000
+),
+primes as (
+    select a.num p
+      from numSel a, numSel b
+     where b.num <= a.num
+     group by a.num
+    having count(case a.num/b.num when trunc(a.num/b.num) then 'Y' end) = 2
+)
+select listagg(p, '&') within group (order by p)
+  from primes
+;

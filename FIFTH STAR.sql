@@ -28,7 +28,7 @@ from employees;
 
   
 select
-    (months * salary) as earnings, 
+    (months * salary) as earnings,
     count(*)
 from employee
 group by 1 

@@ -117,7 +117,7 @@ order by total_count desc, H.hacker_id;
 set @row1:=0;
 set @row2:=0; 
     
-select p_start.start_date,p_end.end_date
+select p_start.start_date,p_end.end_date   
 from (select @row1:=@row1+1 as rown,
     start_date from projects
     where start_date not in (select end_date from projects)) as p_start 
